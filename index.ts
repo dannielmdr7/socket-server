@@ -1,21 +1,17 @@
-import Server from "./classes/server";
-import mensajesRouter from "./routes/router";
-import bodyParser from "body-parser";
-import cors from "cors";
-const server = new Server();
 
-//BodyParser
-server.app.use(bodyParser.urlencoded({ extended: true }))
-server.app.use(bodyParser.json());
+import router from './routes/router';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import Server from './classes/server';
+//guardar las instalaciones con --save-dev para que sea solo usado en el desarrollo
 
-// CORS
-server.app.use(cors({ origin: true, credentials: true }))
+const server = Server.instance;
 
-// Rutas
-server.app.use('/', mensajesRouter)
+server.app.use(bodyParser.urlencoded({ extended: true }));
+server.app.use(bodyParser.json());//siemopre antes de las rutas
+server.app.use(cors({ origin: '*', credentials: true }));//cors permite que personas externas al dominio accedan al servicio
+server.app.use('/', router)
 
-
-server.start(() => {
+server.iniciar(() => {
   console.log(`Servidor corriendo en el puerto ${server.port}`);
-
 })
